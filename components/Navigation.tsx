@@ -1,9 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronRight, Brain, LineChart, Users, Mail, SparkleIcon } from "lucide-react";
+import { Menu, X, ChevronRight, Brain, LineChart, Users, Mail, SparkleIcon, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+  description: string;
+}
 
 const navigationItems = [
   {
@@ -32,7 +39,15 @@ const navigationItems = [
   },
 ];
 
-const NavItem = ({ item, isMobile = false, onClick = () => {} }) => {
+const NavItem = ({ 
+  item,
+  isMobile = false, 
+  onClick = () => {} 
+}: {
+  item: NavigationItem;
+  isMobile?: boolean;
+  onClick?: () => void;
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -70,7 +85,7 @@ const NavItem = ({ item, isMobile = false, onClick = () => {} }) => {
   );
 };
 
-const MobileMenu = ({ isOpen, onClose }) => (
+const MobileMenu = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => (
   <AnimatePresence>
     {isOpen && (
       <motion.div

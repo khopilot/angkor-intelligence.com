@@ -23,6 +23,13 @@ interface Skill {
   proficiency: number;
 }
 
+interface ExpertiseArea {
+  category: string;
+  icon: any;
+  description: string;
+  skills: Skill[];
+}
+
 const expertiseAreas = [
   {
     category: "Core AI Technologies",
@@ -119,7 +126,11 @@ const expertiseAreas = [
   }
 ];
 
-const ExpertiseCard = ({ area, isSelected, onClick }) => {
+const ExpertiseCard = ({ area, isSelected, onClick }: {
+  area: ExpertiseArea;
+  isSelected: boolean;
+  onClick: () => void;
+}) => {
   return (
     <div 
       onClick={onClick}

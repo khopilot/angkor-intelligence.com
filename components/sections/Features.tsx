@@ -14,8 +14,20 @@ import {
   Server
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LucideIcon } from 'lucide-react';
 
-const features = [
+interface Feature {
+  title: string;
+  icon: LucideIcon;
+  description: string;
+  color: 'blue' | 'purple' | 'emerald';
+  showcase: Array<{
+    title: string;
+    value: string;
+  }>;
+}
+
+const features: Feature[] = [
   {
     title: "Voice & Speech AI",
     icon: Mic,
@@ -54,7 +66,7 @@ const features = [
   }
 ];
 
-const FeatureShowcase = ({ feature }) => {
+const FeatureShowcase = ({ feature }: { feature: Feature }) => {
   const gradients = {
     blue: "from-blue-500 to-indigo-500",
     purple: "from-purple-500 to-pink-500",
@@ -88,8 +100,8 @@ const FeatureShowcase = ({ feature }) => {
   );
 };
 
-const InteractiveDemo = ({ selectedFeature }) => {
-  const screens = {
+const InteractiveDemo = ({ selectedFeature }: { selectedFeature: Feature }) => {
+  const screens: Record<string, JSX.Element> = {
     "Voice & Speech AI": (
       <div className="relative h-full w-full bg-gray-900/50 rounded-2xl p-6 border border-gray-800">
         <div className="flex items-center justify-center h-full">

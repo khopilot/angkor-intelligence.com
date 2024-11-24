@@ -48,7 +48,7 @@ const stats = [
   }
 ];
 
-const CountingNumber = ({ value, duration = 2000 }) => {
+const CountingNumber = ({ value, duration = 2000 }: { value: string, duration?: number }) => {
   const ref = useRef(null);
   const isInView = useInView(ref);
   const [isAnimated, setIsAnimated] = useState(false);
@@ -94,7 +94,7 @@ const CountingNumber = ({ value, duration = 2000 }) => {
   );
 };
 
-const StatCard = ({ stat, index }) => {
+const StatCard = ({ stat, index }: { stat: typeof stats[0], index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
   
   return (
@@ -134,7 +134,7 @@ const StatCard = ({ stat, index }) => {
           <div className={`mt-4 space-y-2 transition-all duration-300 ${
             isHovered ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0 overflow-hidden'
           }`}>
-            {stat.details.map((detail, idx) => (
+            {stat.details.map((detail: string, idx: number) => (
               <div key={idx} className="flex items-center gap-2 text-sm text-gray-300">
                 <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${stat.gradient}`} />
                 {detail}
