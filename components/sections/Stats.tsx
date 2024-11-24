@@ -1,151 +1,88 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { 
-  Users2, 
   Brain, 
-  BarChart3, 
-  Award, 
-  Building2, 
-  Globe2,
-  Server,
-  Cpu
+  Database, 
+  Bot,
+  Cpu,
+  LucideIcon
 } from "lucide-react";
+
+interface Stat {
+  name: string;
+  value: string;
+  description: string;
+  icon: LucideIcon;
+  gradient: string;
+  iconBg: string;
+}
 
 const stats = [
   {
-    name: "Global Clients",
-    value: "500+",
-    description: "Trusted by companies worldwide",
-    icon: Globe2,
-    gradient: "from-blue-500 to-cyan-500",
-    details: ["Fortune 500 Companies", "Tech Startups", "Research Institutions"]
-  },
-  {
-    name: "AI Models Deployed",
-    value: "1000+",
-    description: "Custom AI solutions in production",
+    name: "Active Projects",
+    value: "20+",
+    description: "Custom AI solutions in development",
     icon: Brain,
-    gradient: "from-purple-500 to-pink-500",
-    details: ["Voice Processing", "Computer Vision", "NLP Models"]
+    gradient: "from-blue-400 to-blue-600",
+    iconBg: "bg-blue-500"
   },
   {
     name: "Data Processed",
-    value: "1B+",
-    description: "Data points analyzed monthly",
-    icon: Server,
-    gradient: "from-emerald-500 to-teal-500",
-    details: ["Text Documents", "Voice Recordings", "Image Data"]
+    value: "100M+",
+    description: "Documents and audio files processed",
+    icon: Database,
+    gradient: "from-purple-400 to-pink-600",
+    iconBg: "bg-purple-500"
+  },
+  {
+    name: "AI Models",
+    value: "15+",
+    description: "Specialized models deployed",
+    icon: Bot,
+    gradient: "from-emerald-400 to-emerald-600",
+    iconBg: "bg-emerald-500"
   },
   {
     name: "Computing Power",
-    value: "100K+",
+    value: "10K+",
     description: "GPU hours monthly",
     icon: Cpu,
-    gradient: "from-orange-500 to-red-500",
-    details: ["Training", "Inference", "Optimization"]
+    gradient: "from-orange-400 to-orange-600",
+    iconBg: "bg-orange-500"
   }
 ];
 
-const CountingNumber = ({ value, duration = 2000 }: { value: string, duration?: number }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref);
-  const [isAnimated, setIsAnimated] = useState(false);
-  
-  // Parse the number from the string (e.g., "500+" -> 500)
-  const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
-  const suffix = value.replace(/[0-9]/g, '');
-  
-  // Animation variants for the counting effect
-  const variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5 }
-    }
-  };
-
-  if (isInView && !isAnimated) {
-    setIsAnimated(true);
-  }
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={variants}
-      className="font-bold text-4xl sm:text-5xl bg-clip-text text-transparent relative"
-    >
-      {isAnimated ? (
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {numericValue.toString()}{suffix}
-        </motion.span>
-      ) : (
-        "0"
-      )}
-    </motion.div>
-  );
-};
-
-const StatCard = ({ stat, index }: { stat: typeof stats[0], index: number }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
+const StatCard = ({ stat }: { stat: Stat }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.5 }}
       viewport={{ once: true }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="relative group"
+      className="relative p-6 rounded-2xl bg-gray-900/40 border border-gray-800"
     >
-      {/* Background Card */}
-      <div className={`relative p-8 rounded-xl border transition-all duration-300
-        ${isHovered 
-          ? 'bg-gray-800/90 border-gray-700 shadow-lg' 
-          : 'bg-gray-900/50 border-gray-800'}`}
-      >
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center text-center">
-          {/* Icon with gradient background */}
-          <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.gradient} 
-            transform transition-transform duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}>
-            <stat.icon className="h-6 w-6 text-white" />
-          </div>
+      {/* Icon */}
+      <div className={`w-12 h-12 rounded-xl ${stat.iconBg} flex items-center justify-center mb-6`}>
+        <stat.icon className="h-6 w-6 text-white" />
+      </div>
 
-          {/* Counter */}
-          <div className={`mt-4 bg-gradient-to-r ${stat.gradient}`}>
-            <CountingNumber value={stat.value} />
-          </div>
+      {/* Bar below icon */}
+      <div className={`h-2 w-24 rounded-full bg-gradient-to-r ${stat.gradient} mb-6`} />
 
-          {/* Stat name and description */}
-          <h3 className="text-lg font-semibold mt-2 text-white">{stat.name}</h3>
-          <p className="text-sm text-gray-400 mt-1">{stat.description}</p>
+      {/* Content */}
+      <h3 className="text-xl font-semibold text-white mb-2">
+        {stat.name}
+      </h3>
+      <p className="text-gray-400 text-sm">
+        {stat.description}
+      </p>
 
-          {/* Details list */}
-          <div className={`mt-4 space-y-2 transition-all duration-300 ${
-            isHovered ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0 overflow-hidden'
-          }`}>
-            {stat.details.map((detail: string, idx: number) => (
-              <div key={idx} className="flex items-center gap-2 text-sm text-gray-300">
-                <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${stat.gradient}`} />
-                {detail}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Gradient overlay */}
-        <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${stat.gradient} 
-          opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+      {/* Number overlay */}
+      <div className="absolute top-6 right-6">
+        <span className={`text-2xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
+          {stat.value}
+        </span>
       </div>
     </motion.div>
   );
@@ -156,24 +93,14 @@ export default function Stats() {
     <section className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]"></div>
       </div>
 
       <div className="max-w-7xl mx-auto">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Our Impact in Numbers
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Driving innovation and delivering results through advanced AI solutions
-          </p>
-        </div>
-
         {/* Stats grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <StatCard key={stat.name} stat={stat} index={index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat) => (
+            <StatCard key={stat.name} stat={stat} />
           ))}
         </div>
       </div>
